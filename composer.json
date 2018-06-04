@@ -1,5 +1,5 @@
 {
-    "name": "lireincore/ymlparser",
+    "name": "lyudmila-petrova/ymlparser",
     "description": "YML (Yandex Market Language) parser",
     "type": "library",
     "keywords": ["yml", "parser", "yandex", "market"],
