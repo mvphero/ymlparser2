@@ -134,6 +134,11 @@ abstract class AOffer
     protected $params = [];
 
     /**
+     * @var string
+     */
+    protected $modifiedTime;
+
+    /**
      * @return array
      */
     public function getAttributesList()
@@ -144,7 +149,8 @@ abstract class AOffer
             //subNodes
             'price', 'oldprice', 'vat', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
-            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions'
+            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions',
+            'modified_time'
         ];
     }
 
@@ -811,6 +817,25 @@ abstract class AOffer
     public function addParam(Param $value)
     {
         $this->params[] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getModifiedTime()
+    {
+        return $this->modifiedTime === null ? null : (string) $this->modifiedTime;
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setModifiedTime($value)
+    {
+        $this->modifiedTime = $value;
 
         return $this;
     }
