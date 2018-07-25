@@ -139,6 +139,11 @@ abstract class AOffer
     protected $modifiedTime;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @return array
      */
     public function getAttributesList()
@@ -150,7 +155,8 @@ abstract class AOffer
             'price', 'oldprice', 'vat', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
             'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions',
-            'modified_time'
+            'modified_time',
+            'name'
         ];
     }
 
@@ -836,6 +842,25 @@ abstract class AOffer
     public function setModifiedTime($value)
     {
         $this->modifiedTime = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setName($value)
+    {
+        $this->name = $value;
 
         return $this;
     }
