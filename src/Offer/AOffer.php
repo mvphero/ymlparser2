@@ -69,6 +69,11 @@ abstract class AOffer
     protected $pictures = [];
 
     /**
+     * @var int[]
+     */
+    protected $categoryIds = [];
+
+    /**
      * @var string
      */
     protected $store;
@@ -295,6 +300,10 @@ abstract class AOffer
      */
     public function addAttribute(array $attrNode)
     {
+        if ($attrNode['name'] === 'categoryId') {
+            $this->addCategory($attrNode['value']);
+        }
+
         if ($attrNode['name'] === 'outlets') {
             foreach ($attrNode['nodes'] as $subNode) {
                 $this->addOutlet((new Outlet())->addAttributes($subNode['attributes']));
@@ -539,6 +548,25 @@ abstract class AOffer
         $this->pictures[] = $value;
 
         return $this;
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function addCategory($value)
+    {
+        $this->categoryIds[] = (int)$value;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getCategories()
+    {
+        return $this->categoryIds ?: null;
     }
 
     /**
