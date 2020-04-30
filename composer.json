@@ -1,18 +1,17 @@
 {
-    "name": "lyudmila-petrova/ymlparser",
+    "name": "mvphero/ymlparser2",
     "description": "YML (Yandex Market Language) parser",
     "type": "library",
     "keywords": ["yml", "parser", "yandex", "market"],
     "homepage": "https://github.com/lireincore/ymlparser",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/lireincore/ymlparser/issues",
-        "source": "https://github.com/lireincore/ymlparser"
+        "source": "https://github.com/mvphero/ymlparser2"
     },
     "authors": [
         {
-            "name": "lirein",
-            "email": "lirein@inbox.ru"
+            "name": "mvphero",
+            "email": "1ivan.krasnikov@gmail.com"
         }
     ],
     "require": {
