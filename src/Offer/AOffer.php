@@ -51,11 +51,6 @@ abstract class AOffer
     /**
      * @var string
      */
-    protected $vat;
-
-    /**
-     * @var string
-     */
     protected $currencyId;
 
     /**
@@ -67,11 +62,6 @@ abstract class AOffer
      * @var string[]
      */
     protected $pictures = [];
-
-    /**
-     * @var int[]
-     */
-    protected $categoryIds = [];
 
     /**
      * @var string
@@ -139,16 +129,6 @@ abstract class AOffer
     protected $params = [];
 
     /**
-     * @var string
-     */
-    protected $modifiedTime;
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
      * @return array
      */
     public function getAttributesList()
@@ -157,11 +137,9 @@ abstract class AOffer
             //attributes
             'id', 'cbid', 'bid', 'available', //type,
             //subNodes
-            'price', 'oldprice', 'vat', 'currencyId', 'categoryId', 'picture', 'delivery',
+            'price', 'oldprice', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
-            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions',
-            'modified_time',
-            'name'
+            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions'
         ];
     }
 
@@ -202,13 +180,6 @@ abstract class AOffer
             $this->addError("Offer: incorrect value in attribute 'oldprice'");
         }
 
-        if ($this->vat !== null && !in_array($this->vat, [
-                '1', '2', '3', '4', '5', '6', 'VAT_18', 'VAT_18_118', 'VAT_10', 'VAT_10_110', 'VAT_0', 'NO_VAT'
-            ], true))
-        {
-            $this->addError("Offer: incorrect value in attribute 'vat'");
-        }
-
         if ($this->currencyId === null) {
             $this->addError("Offer: missing required attribute 'currencyId'");
         } elseif (!$this->currencyId) {
@@ -234,7 +205,8 @@ abstract class AOffer
         }
 
         if ($this->weight !== null && (!is_numeric($this->weight) || (float)$this->weight <= 0)) {
-            $this->addError("Offer: incorrect value in attribute 'weight'");
+            $this->weight=(int)$this->weight;
+            // $this->addError("Offer: incorrect value in attribute 'weight'");
         }
 
         $subIsValid = true;
@@ -300,10 +272,6 @@ abstract class AOffer
      */
     public function addAttribute(array $attrNode)
     {
-        if ($attrNode['name'] === 'categoryId') {
-            $this->addCategory($attrNode['value']);
-        }
-
         if ($attrNode['name'] === 'outlets') {
             foreach ($attrNode['nodes'] as $subNode) {
                 $this->addOutlet((new Outlet())->addAttributes($subNode['attributes']));
@@ -462,25 +430,6 @@ abstract class AOffer
     }
 
     /**
-     * @return int|string|null
-     */
-    public function getVat()
-    {
-        return is_numeric($this->vat) ? (int)$this->vat : $this->vat;
-    }
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setVat($value)
-    {
-        $this->vat = $value;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getCurrencyId()
@@ -548,25 +497,6 @@ abstract class AOffer
         $this->pictures[] = $value;
 
         return $this;
-    }
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function addCategory($value)
-    {
-        $this->categoryIds[] = (int)$value;
-
-        return $this;
-    }
-
-    /**
-     * @return string[]|null
-     */
-    public function getCategories()
-    {
-        return $this->categoryIds ?: null;
     }
 
     /**
@@ -851,44 +781,6 @@ abstract class AOffer
     public function addParam(Param $value)
     {
         $this->params[] = $value;
-
-        return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getModifiedTime()
-    {
-        return $this->modifiedTime === null ? null : (string) $this->modifiedTime;
-    }
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setModifiedTime($value)
-    {
-        $this->modifiedTime = $value;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setName($value)
-    {
-        $this->name = $value;
 
         return $this;
     }
