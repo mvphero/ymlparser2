@@ -35,10 +35,6 @@ class DeliveryOption
             $this->addError("DeliveryOption: incorrect value in attribute 'cost'");
         }
 
-        if ($this->days === null) {
-            $this->addError("DeliveryOption: missing required attribute 'days'");
-        }
-
         if ($this->orderBefore !== null && (!is_numeric($this->orderBefore) || (int)$this->orderBefore < 0 || (int)$this->orderBefore > 24)) {
             $this->addError("DeliveryOption: incorrect value in attribute 'order-before'");
         }

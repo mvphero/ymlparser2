@@ -97,11 +97,6 @@ class TourOffer extends AExtOffer
         if ($this->name === null) {
             $this->addError("Offer: missing required attribute 'name'");
         }
-        if ($this->days === null) {
-            $this->addError("Offer: missing required attribute 'days'");
-        } elseif (!is_numeric($this->days) || (int)$this->days <= 0) {
-            $this->addError("Offer: incorrect value in attribute 'days'");
-        }
 
         if ($this->included === null) {
             $this->addError("Offer: missing required attribute 'included'");
