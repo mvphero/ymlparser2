@@ -23,6 +23,11 @@ class Category
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $url;
+
+    /**
      * @return bool
      */
     public function isValid()
@@ -108,6 +113,25 @@ class Category
     public function setName($value)
     {
         $this->name = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setUrl($value)
+    {
+        $this->url = $value;
 
         return $this;
     }
