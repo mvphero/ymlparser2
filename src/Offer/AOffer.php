@@ -282,6 +282,8 @@ abstract class AOffer
             $this->addBarcode($attrNode['value']);
         } elseif ($attrNode['name'] === 'param') {
             $this->addParam((new Param())->addAttributes($attrNode['attributes'] + ['value' => $attrNode['value']]));
+        } elseif ($attrNode['name'] === 'credit-template') {
+            return $this;
         } else {
             if (!is_null($attrNode['value'])) {
                 $this->addField($attrNode['name'], $attrNode['value']);
