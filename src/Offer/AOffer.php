@@ -134,6 +134,11 @@ abstract class AOffer
     protected $params = [];
 
     /**
+     * @var Stock[]
+     */
+    protected $stocks = [];
+
+    /**
      * @return array
      */
     public function getAttributesList()
@@ -144,7 +149,7 @@ abstract class AOffer
             //subNodes
             'price', 'oldprice', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
-            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode',
+            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode', 'stock',
         ];
     }
 
@@ -229,6 +234,13 @@ abstract class AOffer
                 }
             }
         }
+        if ($this->stocks) {
+            foreach ($this->stocks as $stock) {
+                if (!$stock->isValid()) {
+                    $subIsValid = false;
+                }
+            }
+        }
 
         return empty($this->errors) && $subIsValid;
     }
@@ -287,6 +299,12 @@ abstract class AOffer
             $this->addBarcode($attrNode['value']);
         } elseif ($attrNode['name'] === 'param') {
             $this->addParam((new Param())->addAttributes($attrNode['attributes'] + ['value' => $attrNode['value']]));
+        } elseif ($attrNode['name'] === 'stock') {
+            $attributes = $attrNode['attributes'];
+            foreach ($attrNode['nodes'] as $node) {
+                $attributes[$node['name']] = $node['value'];
+            }
+            $this->addStock((new Stock())->addAttributes($attributes));
         } else {
             if (!is_null($attrNode['value'])) {
                 $this->addField($attrNode['name'], $attrNode['value']);
@@ -786,6 +804,17 @@ abstract class AOffer
     public function addParam(Param $value)
     {
         $this->params[] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param Stock $value
+     * @return $this
+     */
+    public function addStock(Stock $value)
+    {
+        $this->stocks[] = $value;
 
         return $this;
     }
