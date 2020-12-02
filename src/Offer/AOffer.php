@@ -134,9 +134,9 @@ abstract class AOffer
     protected $params = [];
 
     /**
-     * @var Stock[]
+     * @var Region[]
      */
-    protected $stocks = [];
+    protected $regions = [];
 
     /**
      * @return array
@@ -149,7 +149,7 @@ abstract class AOffer
             //subNodes
             'price', 'oldprice', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
-            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode', 'stock',
+            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode', 'region',
         ];
     }
 
@@ -234,9 +234,9 @@ abstract class AOffer
                 }
             }
         }
-        if ($this->stocks) {
-            foreach ($this->stocks as $stock) {
-                if (!$stock->isValid()) {
+        if ($this->regions) {
+            foreach ($this->regions as $region) {
+                if (!$region->isValid()) {
                     $subIsValid = false;
                 }
             }
@@ -299,12 +299,12 @@ abstract class AOffer
             $this->addBarcode($attrNode['value']);
         } elseif ($attrNode['name'] === 'param') {
             $this->addParam((new Param())->addAttributes($attrNode['attributes'] + ['value' => $attrNode['value']]));
-        } elseif ($attrNode['name'] === 'stock') {
+        } elseif ($attrNode['name'] === 'region') {
             $attributes = $attrNode['attributes'];
             foreach ($attrNode['nodes'] as $node) {
                 $attributes[$node['name']] = $node['value'];
             }
-            $this->addStock((new Stock())->addAttributes($attributes));
+            $this->addRegion((new Region())->addAttributes($attributes));
         } else {
             if (!is_null($attrNode['value'])) {
                 $this->addField($attrNode['name'], $attrNode['value']);
@@ -809,12 +809,12 @@ abstract class AOffer
     }
 
     /**
-     * @param Stock $value
+     * @param Region $value
      * @return $this
      */
-    public function addStock(Stock $value)
+    public function addRegion(Region $value)
     {
-        $this->stocks[] = $value;
+        $this->regions[] = $value;
 
         return $this;
     }
