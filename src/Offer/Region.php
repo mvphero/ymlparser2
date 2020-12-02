@@ -5,7 +5,7 @@ namespace LireinCore\YMLParser\Offer;
 use LireinCore\YMLParser\TError;
 use LireinCore\YMLParser\TYML;
 
-class Stock
+class Region
 {
     use TYML;
     use TError;
@@ -26,7 +26,7 @@ class Stock
     public function isValid()
     {
         if (empty($this->id)) {
-            $this->addError("Stock: missing required attribute 'id'");
+            $this->addError("Region: missing required attribute 'id'");
         }
         return empty($this->errors);
     }
