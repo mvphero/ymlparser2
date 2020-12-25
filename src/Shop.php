@@ -80,6 +80,8 @@ class Shop
      */
     protected $offersCount = 0;
 
+    private $tree = [];
+
     /**
      * @return array
      */
@@ -486,12 +488,57 @@ class Shop
         return $parents;
     }
 
-    /**
-     * @return Category[]|null
-     */
-    public function getCategories()
+    public function parseCategories(): void
     {
-        return $this->categories ?: null;
+        if (empty($this->tree)) {
+            $categories = $this->categories;
+            $this->categories = [];
+            $this->tree = $this->buildTree($categories);
+        }
+    }
+
+    public function getCategories(): iterable
+    {
+        $this->parseCategories();
+        return $this->eachBranch($this->tree);
+    }
+
+    /**
+     * @param Category[] $tree
+     * @return Category
+     */
+    public function eachBranch(array $branches): iterable
+    {
+        foreach ($branches as $branch) {
+            yield $branch;
+            if (!empty($branch->children)) {
+                foreach ($this->eachBranch($branch->children) as $child) {
+                    yield $child;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param Category[] $categories
+     * @param null|int $parentId
+     * @return array
+     */
+    public function buildTree(array $categories, $parentId = null): array {
+        $branch = [];
+        foreach ($categories as $category) {
+            if ($category->getParentId() == $parentId) {
+                $children = $this->buildTree($categories, $category->getId());
+                if ($children) {
+                    $category->children = $children;
+                }
+                $branch[] = $category;
+                $ctg = clone $category;
+                $ctg->children = [];
+                $this->categories[$ctg->getId()] = $ctg;
+            }
+        }
+        return $branch;
     }
 
     /**
