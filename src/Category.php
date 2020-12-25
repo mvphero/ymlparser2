@@ -28,6 +28,11 @@ class Category
     protected $url;
 
     /**
+     * @var array
+     */
+    public $children = [];
+
+    /**
      * @return bool
      */
     public function isValid()
