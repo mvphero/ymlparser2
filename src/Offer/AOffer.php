@@ -139,6 +139,11 @@ abstract class AOffer
     protected $regions = [];
 
     /**
+     * @var string
+     */
+    protected $brandId;
+
+    /**
      * @return array
      */
     public function getAttributesList()
@@ -149,7 +154,7 @@ abstract class AOffer
             //subNodes
             'price', 'oldprice', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
-            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode', 'region',
+            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode', 'region', 'brandId'
         ];
     }
 
@@ -833,5 +838,21 @@ abstract class AOffer
     public function setOfferCode($offerCode)
     {
         $this->offerCode = $offerCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBrandId(): string
+    {
+        return $this->brandId ?? '';
+    }
+
+    /**
+     * @param string $brandId
+     */
+    public function setBrandId(string $brandId): void
+    {
+        $this->brandId = $brandId;
     }
 }
