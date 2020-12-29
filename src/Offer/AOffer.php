@@ -144,6 +144,11 @@ abstract class AOffer
     protected $brandId;
 
     /**
+     * @var string
+     */
+    protected $typePrefix;
+
+    /**
      * @return array
      */
     public function getAttributesList()
@@ -154,7 +159,7 @@ abstract class AOffer
             //subNodes
             'price', 'oldprice', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
-            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode', 'region', 'brandId'
+            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode', 'region', 'brandId', 'typePrefix'
         ];
     }
 
@@ -854,5 +859,24 @@ abstract class AOffer
     public function setBrandId(string $brandId): void
     {
         $this->brandId = $brandId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTypePrefix()
+    {
+        return $this->typePrefix;
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setTypePrefix($value)
+    {
+        $this->typePrefix = $value;
+
+        return $this;
     }
 }
