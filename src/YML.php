@@ -3,7 +3,6 @@
 namespace LireinCore\YMLParser;
 
 use LireinCore\Exception\FileNotFoundException;
-use LireinCore\YMLParser\Offer\VendorModelOffer;
 use LireinCore\YMLParser\Offer\BookOffer;
 use LireinCore\YMLParser\Offer\AudioBookOffer;
 use LireinCore\YMLParser\Offer\ArtistTitleOffer;
@@ -106,7 +105,7 @@ class YML
     }
 
     /**
-     * @return \Generator|SimpleOffer[]|VendorModelOffer[]|BookOffer[]|AudioBookOffer[]|ArtistTitleOffer[]|MedicineOffer[]|EventTicketOffer[]|TourOffer[]
+     * @return \Generator|SimpleOffer[]|BookOffer[]|AudioBookOffer[]|ArtistTitleOffer[]|MedicineOffer[]|EventTicketOffer[]|TourOffer[]
      * @throws \Exception
      */
     public function getOffers()
@@ -155,7 +154,7 @@ class YML
     }
 
     /**
-     * @return SimpleOffer|VendorModelOffer|BookOffer|AudioBookOffer|ArtistTitleOffer|MedicineOffer|EventTicketOffer|TourOffer
+     * @return SimpleOffer|BookOffer|AudioBookOffer|ArtistTitleOffer|MedicineOffer|EventTicketOffer|TourOffer
      * @throws \Exception
      */
     protected function parseOffer()
@@ -288,13 +287,13 @@ class YML
 
     /**
      * @param $type
-     * @return SimpleOffer|VendorModelOffer|BookOffer|AudioBookOffer|ArtistTitleOffer|MedicineOffer|EventTicketOffer|TourOffer
+     * @return SimpleOffer|BookOffer|AudioBookOffer|ArtistTitleOffer|MedicineOffer|EventTicketOffer|TourOffer
      */
     protected function createOffer($type)
     {
         switch ($type) {
             case 'vendor.model':
-                return new VendorModelOffer();
+                return new SimpleOffer();
             case 'book':
                 return new BookOffer();
             case 'audiobook':

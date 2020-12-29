@@ -10,13 +10,18 @@ class SimpleOffer extends AMainOffer
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $typePrefix;
+
+    /**
      * @return array
      */
     public function getAttributesList()
     {
         return array_merge(parent::getAttributesList(), [
             //subNodes
-            'name'
+            'name', 'typePrefix'
         ]);
     }
 
@@ -49,6 +54,25 @@ class SimpleOffer extends AMainOffer
     public function setName($value)
     {
         $this->name = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTypePrefix()
+    {
+        return $this->typePrefix;
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setTypePrefix($value)
+    {
+        $this->typePrefix = $value;
 
         return $this;
     }
