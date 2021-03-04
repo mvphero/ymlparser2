@@ -63,7 +63,7 @@ abstract class AOffer
     protected $categoryId;
 
     /**
-     * @var string
+     * @var string[]
      */
     protected $categories;
 
