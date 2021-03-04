@@ -65,6 +65,11 @@ abstract class AOffer
     /**
      * @var string[]
      */
+    protected $categories;
+
+    /**
+     * @var string[]
+     */
     protected $pictures = [];
 
     /**
@@ -297,7 +302,14 @@ abstract class AOffer
             foreach ($attrNode['nodes'] as $subNode) {
                 $this->addOutlet((new Outlet())->addAttributes($subNode['attributes']));
             }
-        } elseif ($attrNode['name'] === 'picture') {
+        }
+        elseif ($attrNode['name'] === 'categoryId') {
+            if (!is_null($attrNode['value'])) {
+                $this->addField($attrNode['name'], $attrNode['value']);
+                $this->addCategory($attrNode['value']);
+            }
+        }
+        elseif ($attrNode['name'] === 'picture') {
             $this->addPicture($attrNode['value']);
         } elseif ($attrNode['name'] === 'barcode') {
             $this->addBarcode($attrNode['value']);
@@ -476,6 +488,14 @@ abstract class AOffer
     }
 
     /**
+     * @return []
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
      * @return int|null
      */
     public function getCategoryId()
@@ -511,6 +531,17 @@ abstract class AOffer
         foreach ($value as $picture) {
             $this->addPicture($picture);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function addCategory($value)
+    {
+        $this->categories[] = $value;
 
         return $this;
     }
