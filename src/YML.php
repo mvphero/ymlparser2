@@ -259,7 +259,7 @@ class YML
         }
     }
 
-    protected function close()
+    public function close()
     {
         $this->pathArr = [];
         $this->path = '';
