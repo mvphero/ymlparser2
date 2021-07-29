@@ -87,4 +87,20 @@ class Region
     {
         return $this->oldPrice;
     }
+
+    /**
+     * @param mixed $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @param mixed $oldPrice
+     */
+    public function setOldPrice($oldPrice)
+    {
+        $this->oldPrice = $oldPrice;
+    }
 }
