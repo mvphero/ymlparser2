@@ -21,6 +21,16 @@ class Region
     protected $available;
 
     /**
+     * @var
+     */
+    protected $price;
+
+    /**
+     * @var
+     */
+    protected $oldPrice;
+
+    /**
      * @return bool
      */
     public function isValid()
@@ -62,5 +72,19 @@ class Region
     public function setAvailable($value): void
     {
         $this->available = $value;
+    }
+
+    /**
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     */
+    public function getOldPrice()
+    {
+        return $this->oldPrice;
     }
 }
