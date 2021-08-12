@@ -279,14 +279,14 @@ abstract class AOffer
      * @param array $offerNode
      * @return $this
      */
-    public function fillOffer(array $offerNode)
+    public function fillOffer(array $offerNode, array $fieldsMapping = [])
     {
         foreach ($offerNode['attributes'] as $name => $value) {
             $this->addField($name, $value);
         }
 
         foreach ($offerNode['nodes'] as $attrNode) {
-            $this->addAttribute($attrNode);
+            $this->addAttributeWithMapping($attrNode, $fieldsMapping);
         }
 
         return $this;
@@ -294,6 +294,7 @@ abstract class AOffer
 
     /**
      * @param array $attrNode
+     * @param array $fieldsMapping
      * @return $this
      */
     public function addAttribute(array $attrNode)
@@ -321,7 +322,8 @@ abstract class AOffer
                 $attributes[$node['name']] = $node['value'];
             }
             $this->addRegion((new Region())->addAttributes($attributes));
-        } else {
+        }
+        else {
             if (!is_null($attrNode['value'])) {
                 $this->addField($attrNode['name'], $attrNode['value']);
             }
@@ -885,4 +887,19 @@ abstract class AOffer
     {
         $this->brandId = $brandId;
     }
+
+    /**
+     * TODO: Этот метод сделал, что не переопредлять в наследниках addAttributeWithMapping
+     *
+     * @param array $attrNode
+     * @param array $fieldsMapping
+     */
+    protected function addAttributeWithMapping(array $attrNode, array $fieldsMapping = []){
+        if (!empty($fieldsMapping[$attrNode['name']])){
+            $this->addAdditionalValue($attrNode['name'], $attrNode['value']);
+        }else{
+            $this->addAttribute($attrNode);
+        }
+    }
+
 }

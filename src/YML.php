@@ -108,7 +108,7 @@ class YML
      * @return \Generator|SimpleOffer[]|BookOffer[]|AudioBookOffer[]|ArtistTitleOffer[]|MedicineOffer[]|EventTicketOffer[]|TourOffer[]
      * @throws \Exception
      */
-    public function getOffers()
+    public function getOffers(array $fieldsMapping = [])
     {
         $this->open();
 
@@ -116,7 +116,7 @@ class YML
             if ($this->path === 'yml_catalog/shop/offers') {
                 while ($this->read()) {
                     if ($this->path === 'yml_catalog/shop/offers/offer') {
-                        yield $this->parseOffer();
+                        yield $this->parseOffer($fieldsMapping);
                     } elseif ($this->path === 'yml_catalog/shop') {
                         break;
                     }
@@ -157,12 +157,12 @@ class YML
      * @return SimpleOffer|BookOffer|AudioBookOffer|ArtistTitleOffer|MedicineOffer|EventTicketOffer|TourOffer
      * @throws \Exception
      */
-    protected function parseOffer()
+    protected function parseOffer(array $fieldsMapping = [])
     {
         $offerNode = $this->parseNode('yml_catalog/shop/offers');
 
         $type = isset($offerNode['attributes']['type']) ? $offerNode['attributes']['type'] : null;
-        return $this->createOffer($type)->fillOffer($offerNode);
+        return $this->createOffer($type)->fillOffer($offerNode, $fieldsMapping);
 
     }
 

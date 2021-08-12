@@ -8,6 +8,16 @@ namespace LireinCore\YMLParser;
  */
 trait TYML
 {
+    protected array $additionalFields = [];
+
+    /**
+     * @return array
+     */
+    public function getAdditionalFields()
+    {
+        return $this->additionalFields;
+    }
+
     /**
      * @param string $name
      * @param mixed $value
@@ -19,6 +29,18 @@ trait TYML
         if (method_exists($this, $setter)) {
             $this->$setter($value);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return $this
+     */
+    protected function addAdditionalValue($name, $value)
+    {
+        $this->additionalFields[$name] = $value;
 
         return $this;
     }
