@@ -247,7 +247,7 @@ class YML
     protected function open()
     {
         $uri = (string)$this->uri;
-        if (!$this->XMLReader->open($uri)) {
+        if (!$this->XMLReader->open($uri,null,LIBXML_BIGLINES|LIBXML_COMPACT|LIBXML_NOENT|LIBXML_NOERROR)) {
             throw new FileNotFoundException("Failed to open XML file '{$uri}'");
         }
 
