@@ -60,6 +60,11 @@ class Shop
     protected $categories = [];
 
     /**
+     * @var Brand[]
+     */
+    protected $brands = [];
+
+    /**
      * @var DeliveryOption[]
      */
     protected $deliveryOptions = [];
@@ -91,7 +96,7 @@ class Shop
             //subNodes
             'name', 'company', 'url', 'platform', 'version', 'agency', //offers,
             'email', 'currencies', 'categories', 'delivery-options',
-            'local_delivery_cost', 'cpa', 'phone'
+            'local_delivery_cost', 'cpa', 'phone', 'brands'
         ];
     }
 
@@ -218,7 +223,12 @@ class Shop
             foreach ($attrNode['nodes'] as $subNode) {
                 $this->addCategory((new Category())->addAttributes($subNode['attributes'] + ['name' => $subNode['value']]));
             }
-        } elseif ($attrNode['name'] === 'delivery-options') {
+        } elseif ($attrNode['name'] === 'brands') {
+            foreach ($attrNode['nodes'] as $subNode) {
+                $this->addBrand((new Brand())->addAttributes($subNode['attributes'] + ['name' => $subNode['value']]));
+            }
+        }
+        elseif ($attrNode['name'] === 'delivery-options') {
             foreach ($attrNode['nodes'] as $subNode) {
                 $this->addDeliveryOption((new DeliveryOption())->addAttributes($subNode['attributes']));
             }
@@ -497,6 +507,14 @@ class Shop
         }
     }
 
+    /**
+     * @return \App\Model\Source\Service\Sources\Read\Feed\ReadEntity\Brand\Brand[]
+     */
+    public function getBrands(): iterable
+    {
+        return $this->brands;
+    }
+
     public function getCategories(): iterable
     {
         $this->parseCategories();
@@ -565,6 +583,17 @@ class Shop
     public function addCategory(Category $value)
     {
         $this->categories[$value->getId()] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param Brand $value
+     * @return $this
+     */
+    public function addBrand(Brand $value)
+    {
+        $this->brands[$value->getId()] = $value;
 
         return $this;
     }
