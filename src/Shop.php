@@ -508,7 +508,7 @@ class Shop
     }
 
     /**
-     * @return \App\Model\Source\Service\Sources\Read\Feed\ReadEntity\Brand\Brand[]
+     * @return Brand
      */
     public function getBrands(): iterable
     {
