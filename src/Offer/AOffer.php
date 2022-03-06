@@ -155,7 +155,7 @@ abstract class AOffer
     /**
      * @var string
      */
-    protected $offerLabel;
+    protected $label;
 
     /**
      * @return array
@@ -169,7 +169,7 @@ abstract class AOffer
             'price', 'oldprice', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
             'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode',
-            'region', 'brandId', 'snippet', 'offerLabel'
+            'region', 'brandId', 'snippet', 'label'
         ];
     }
 
@@ -906,10 +906,10 @@ abstract class AOffer
     }
 
     /**
-     * @param string $offerLabel
+     * @param string $label
      */
-    public function setOfferLabel($offerLabel)
+    public function setLabel($label)
     {
-        $this->offerLabel = $offerLabel;
+        $this->label = $label;
     }
 }
