@@ -897,5 +897,19 @@ abstract class AOffer
         $this->brandId = $brandId;
     }
 
+    /**
+     * @param string $snippet
+     */
+    public function setSnippet($snippet)
+    {
+        $this->snippet = $snippet;
+    }
 
+    /**
+     * @param string $offerLabel
+     */
+    public function setOfferLabel($offerLabel)
+    {
+        $this->offerLabel = $offerLabel;
+    }
 }
