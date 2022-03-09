@@ -531,7 +531,7 @@ class Shop
                 continue;
             }
 
-            if ($category->getParentId() === $parentId) {
+            if ($category->getParentId() === $parentId || (!$parentId && !$category->getParentId())) {
                 $children = $this->buildTree($categories, $category->getId());
                 if ($children) {
                     $category->children = $children;
