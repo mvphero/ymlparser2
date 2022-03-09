@@ -526,6 +526,13 @@ class Shop
      */
     public function buildTree(array $categories, $parentId = null): array {
         $branch = [];
+
+        foreach ($categories as $category) {
+            if (!isset($categories[$category->getParentId()])) {
+                $category->setParentId(null);
+            }
+        }
+
         foreach ($categories as $category) {
             if ($category->getId() === $category->getParentId()) {
                 continue;
