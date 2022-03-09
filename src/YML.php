@@ -161,7 +161,10 @@ class YML
     {
         $offerNode = $this->parseNode('yml_catalog/shop/offers');
 
-        $type = isset($offerNode['attributes']['type']) ? $offerNode['attributes']['type'] : null;
+        $type = $offerNode['attributes']['type'] ?? null;
+        if (!$type) {
+            $type = null;
+        }
         return $this->createOffer($type)->fillOffer($offerNode);
 
     }
