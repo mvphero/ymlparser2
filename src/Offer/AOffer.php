@@ -148,6 +148,16 @@ abstract class AOffer
     protected $brandId;
 
     /**
+     * @var string
+     */
+    protected $snippet;
+
+    /**
+     * @var string
+     */
+    protected $label;
+
+    /**
      * @return array
      */
     public function getAttributesList()
@@ -158,7 +168,8 @@ abstract class AOffer
             //subNodes
             'price', 'oldprice', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
-            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode', 'region', 'brandId'
+            'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode',
+            'region', 'brandId', 'snippet', 'label'
         ];
     }
 
@@ -884,5 +895,21 @@ abstract class AOffer
     public function setBrandId(string $brandId): void
     {
         $this->brandId = $brandId;
+    }
+
+    /**
+     * @param string $snippet
+     */
+    public function setSnippet($snippet)
+    {
+        $this->snippet = $snippet;
+    }
+
+    /**
+     * @param string $label
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
     }
 }
