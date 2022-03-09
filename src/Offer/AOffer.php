@@ -314,19 +314,19 @@ abstract class AOffer
                 $this->addOutlet((new Outlet())->addAttributes($subNode['attributes']));
             }
         }
-        elseif ($attrNode['name'] === 'categoryId') {
+        elseif (strtolower($attrNode['name']) === 'categoryid') {
             if (!is_null($attrNode['value'])) {
-                $this->addField($attrNode['name'], $attrNode['value']);
+                $this->addField('categoryId', $attrNode['value']);
                 $this->addCategory($attrNode['value']);
             }
         }
-        elseif ($attrNode['name'] === 'picture') {
+        elseif (strtolower($attrNode['name']) === 'picture') {
             $this->addPicture($attrNode['value']);
-        } elseif ($attrNode['name'] === 'barcode') {
+        } elseif (strtolower($attrNode['name']) === 'barcode') {
             $this->addBarcode($attrNode['value']);
-        } elseif ($attrNode['name'] === 'param') {
+        } elseif (strtolower($attrNode['name']) === 'param') {
             $this->addParam((new Param())->addAttributes($attrNode['attributes'] + ['value' => $attrNode['value']]));
-        } elseif ($attrNode['name'] === 'region') {
+        } elseif (strtolower($attrNode['name']) === 'region') {
             $attributes = $attrNode['attributes'];
             foreach ($attrNode['nodes'] as $node) {
                 $attributes[$node['name']] = $node['value'];
