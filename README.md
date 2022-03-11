@@ -7,7 +7,7 @@
 ## About
 
 [YML (Yandex Market Language)](https://yandex.ru/support/partnermarket/yml/about-yml.xml) streaming parser with validation.
-Based on XMLReader. Suitable for large files.
+Based on XMLReader. Suitable for very large files.
 
 ## Install
 
