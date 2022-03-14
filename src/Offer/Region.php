@@ -103,4 +103,8 @@ class Region
     {
         $this->oldPrice = $oldPrice;
     }
+
+    public function setPresense($presense){
+        $this->setAvailable($presense);
+    }
 }
