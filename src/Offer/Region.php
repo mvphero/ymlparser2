@@ -107,4 +107,9 @@ class Region
     public function setPresense($presense){
         $this->setAvailable($presense);
     }
+
+    public function getPresense(): bool
+    {
+        return $this->available === 'true';
+    }
 }
