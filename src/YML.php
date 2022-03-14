@@ -3,13 +3,13 @@
 namespace LireinCore\YMLParser;
 
 use LireinCore\Exception\FileNotFoundException;
-use LireinCore\YMLParser\Offer\BookOffer;
-use LireinCore\YMLParser\Offer\AudioBookOffer;
 use LireinCore\YMLParser\Offer\ArtistTitleOffer;
-use LireinCore\YMLParser\Offer\MedicineOffer;
+use LireinCore\YMLParser\Offer\AudioBookOffer;
+use LireinCore\YMLParser\Offer\BookOffer;
 use LireinCore\YMLParser\Offer\EventTicketOffer;
-use LireinCore\YMLParser\Offer\TourOffer;
+use LireinCore\YMLParser\Offer\MedicineOffer;
 use LireinCore\YMLParser\Offer\SimpleOffer;
+use LireinCore\YMLParser\Offer\TourOffer;
 
 class YML
 {
@@ -49,11 +49,17 @@ class YML
     protected $shop;
 
     /**
+     * @var int
+     */
+    protected $openFlags;
+
+    /**
      * YML constructor.
      */
-    public function __construct()
+    public function __construct(int $openFlag = LIBXML_BIGLINES | LIBXML_COMPACT | LIBXML_NOENT | LIBXML_NOERROR)
     {
         $this->XMLReader = new \XMLReader();
+        $this->openFlags = $openFlag;
     }
 
     /**
@@ -65,7 +71,7 @@ class YML
     {
         $this->uri = $uri;
         if ($schema === true) {
-            $this->schema = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'yml.xsd';
+            $this->schema = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'yml.xsd';
         } elseif (is_string($schema)) {
             $this->schema = $schema;
         }
@@ -165,6 +171,7 @@ class YML
         if (!$type) {
             $type = null;
         }
+
         return $this->createOffer($type)->fillOffer($offerNode);
 
     }
@@ -178,7 +185,7 @@ class YML
     {
         $xml = $this->XMLReader;
         $name = $xml->name;
-        $path = $basePath . '/' . $name;
+        $path = $basePath.'/'.$name;
         $value = '';
         $nodes = [];
         $isEmpty = $xml->isEmptyElement;
@@ -250,7 +257,7 @@ class YML
     protected function open()
     {
         $uri = (string)$this->uri;
-        if (!$this->XMLReader->open($uri,null,LIBXML_BIGLINES|LIBXML_COMPACT|LIBXML_NOENT|LIBXML_NOERROR)) {
+        if (!$this->XMLReader->open($uri, null, $this->openFlags)) {
             throw new FileNotFoundException("Failed to open XML file '{$uri}'");
         }
 
@@ -285,6 +292,7 @@ class YML
                 array_pop($this->pathArr);
                 $this->path = implode('/', $this->pathArr);
             }
+
             return true;
         }
 
