@@ -326,7 +326,7 @@ abstract class AOffer
             $this->addBarcode($attrNode['value']);
         } elseif (strtolower($attrNode['name']) === 'param') {
             $this->addParam((new Param())->addAttributes($attrNode['attributes'] + ['value' => $attrNode['value']]));
-        } elseif (strtolower($attrNode['name']) === 'region') {
+        } elseif (strtolower($attrNode['name']) === 'region' || strtolower($attrNode['name']) === 'shop') {
             $attributes = $attrNode['attributes'];
             foreach ($attrNode['nodes'] as $node) {
                 $attributes[$node['name']] = $node['value'];
