@@ -327,12 +327,13 @@ abstract class AOffer
         } elseif (strtolower($attrNode['name']) === 'param') {
             $this->addParam((new Param())->addAttributes($attrNode['attributes'] + ['value' => $attrNode['value']]));
         } elseif (strtolower($attrNode['name']) === 'region' || strtolower($attrNode['name']) === 'shop') {
-            $attributes = $attrNode['attributes'];
+            $this->parseRegion($attrNode);
+        } else if(strtolower($attrNode['name']) === 'shops'){
             foreach ($attrNode['nodes'] as $node) {
-                $attributes[$node['name']] = $node['value'];
+                $this->parseRegion($node);
             }
-            $this->addRegion((new Region())->addAttributes($attributes));
-        } else {
+        }
+        else {
             if (!is_null($attrNode['value'])) {
                 $this->addField($attrNode['name'], $attrNode['value']);
             }
@@ -911,5 +912,18 @@ abstract class AOffer
     public function setLabel($label)
     {
         $this->label = $label;
+    }
+
+    /**
+     * @param array $attrNode
+     * @return void
+     */
+    protected function parseRegion(array $attrNode): void
+    {
+        $attributes = $attrNode['attributes'];
+        foreach ($attrNode['nodes'] as $node) {
+            $attributes[$node['name']] = $node['value'];
+        }
+        $this->addRegion((new Region())->addAttributes($attributes));
     }
 }
