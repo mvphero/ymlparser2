@@ -552,6 +552,10 @@ class Shop
         }
 
         foreach ($categories as $category) {
+            if (!$category->getId()) {
+                continue;
+            }
+
             if ($category->getId() === $category->getParentId()) {
                 continue;
             }
