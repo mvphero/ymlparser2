@@ -23,7 +23,7 @@ class Brand
     protected $url;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $logo;
 
@@ -95,7 +95,7 @@ class Brand
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLogo()
     {
@@ -103,7 +103,7 @@ class Brand
     }
 
     /**
-     * @param string $logo
+     * @param string|null $logo
      */
     public function setLogo($logo)
     {
