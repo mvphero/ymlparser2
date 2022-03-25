@@ -23,6 +23,11 @@ class Brand
     protected $url;
 
     /**
+     * @var string|null
+     */
+    private $logo;
+
+    /**
      * @return bool
      */
     public function isValid()
@@ -85,6 +90,24 @@ class Brand
     public function setUrl($value)
     {
         $this->url = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     * @param string|null $logo
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
 
         return $this;
     }
