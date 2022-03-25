@@ -8,9 +8,9 @@ class Brand
     use TError;
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected $id;
+    protected $id = null;
 
     /**
      * @var string
@@ -53,7 +53,7 @@ class Brand
      */
     public function getId()
     {
-        return $this->name;
+        return is_null($this->id) ? $this->getName() : $this->id;
     }
 
     /**
