@@ -28,6 +28,11 @@ class Category
     protected $url;
 
     /**
+     * @var integer
+     */
+    private $ordering;
+
+    /**
      * @var array
      */
     public $children = [];
@@ -137,6 +142,26 @@ class Category
     public function setUrl($value)
     {
         $this->url = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getOrdering(): ?int
+    {
+        return $this->ordering;
+    }
+
+    /**
+     * @param int $ordering
+     *
+     * @return self
+     */
+    public function setOrdering(int $ordering): self
+    {
+        $this->ordering = $ordering;
 
         return $this;
     }
