@@ -319,8 +319,14 @@ abstract class AOffer
                 $this->addField('categoryId', $attrNode['value']);
                 $this->addCategory($attrNode['value']);
             }
-        }
-        elseif (strtolower($attrNode['name']) === 'picture') {
+        } elseif (strtolower($attrNode['name']) === 'categories') {
+            foreach($attrNode['nodes'] as $key => $node) {
+                if (!$key) {
+                    $this->addField('categoryId', $attrNode['value']);
+                }
+                $this->addCategory($node['value']);
+            }
+        } elseif (strtolower($attrNode['name']) === 'picture') {
             $this->addPicture($attrNode['value']);
         } elseif (strtolower($attrNode['name']) === 'barcode') {
             $this->addBarcode($attrNode['value']);
