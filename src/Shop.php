@@ -60,6 +60,11 @@ class Shop
     protected $categories = [];
 
     /**
+     * @var string|null
+     */
+    protected $categoriesOrderBy;
+
+    /**
      * @var Brand[]
      */
     protected $brands = [];
@@ -220,6 +225,8 @@ class Shop
                 $this->addCurrency((new Currency())->addAttributes($subNode['attributes']));
             }
         } elseif ($attrNode['name'] === 'categories') {
+            $this->categoriesOrderBy = $attrNode['attributes']['orderBy'] ?? null;
+
             foreach ($attrNode['nodes'] as $subNode) {
                 $this->addCategory((new Category())->addAttributes($subNode['attributes'] + ['name' => $subNode['value']]));
             }
@@ -696,5 +703,13 @@ class Shop
         $this->offersCount = (int)$value;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCategoriesOrderBy()
+    {
+        return $this->categoriesOrderBy;
     }
 }
