@@ -62,7 +62,7 @@ class Shop
     /**
      * @var string|null
      */
-    protected $categoriesOrderBy;
+    protected $categoriesOrder;
 
     /**
      * @var Brand[]
@@ -225,7 +225,7 @@ class Shop
                 $this->addCurrency((new Currency())->addAttributes($subNode['attributes']));
             }
         } elseif ($attrNode['name'] === 'categories') {
-            $this->categoriesOrderBy = $attrNode['attributes']['orderBy'] ?? null;
+            $this->categoriesOrder = $attrNode['attributes']['order'] ?? null;
 
             foreach ($attrNode['nodes'] as $subNode) {
                 $this->addCategory((new Category())->addAttributes($subNode['attributes'] + ['name' => $subNode['value']]));
@@ -708,8 +708,8 @@ class Shop
     /**
      * @return string|null
      */
-    public function getCategoriesOrderBy()
+    public function getCategoriesOrder()
     {
-        return $this->categoriesOrderBy;
+        return $this->categoriesOrder;
     }
 }
