@@ -66,7 +66,17 @@ class Region
 
     public function getAvailable(): bool
     {
-        return $this->available === 'true';
+        if (!is_string($this->available)) {
+            return (bool)$this->available;
+        }
+
+        $available = str_replace(
+            ['1', 'true', 'yes', '0', 'false', 'no'],
+            [true, true, true, false, false, false],
+            $this->available
+        );
+
+        return (bool)$available;
     }
 
     public function setAvailable($value): void
