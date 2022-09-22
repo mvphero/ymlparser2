@@ -66,8 +66,8 @@ class Region
 
     public function getAvailable(): bool
     {
-        if (is_bool($this->available)) {
-            return $this->available;
+        if (!is_string($this->available)) {
+            return (bool)$this->available;
         }
 
         $available = str_replace(
