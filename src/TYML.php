@@ -9,6 +9,19 @@ namespace LireinCore\YMLParser;
 trait TYML
 {
     /**
+     * @var array
+     */
+    protected $unknownFields = [];
+
+    /**
+     * @return array
+     */
+    public function getUnknownFields()
+    {
+        return $this->unknownFields;
+    }
+
+    /**
      * @param string $name
      * @param mixed $value
      * @return $this
@@ -18,6 +31,8 @@ trait TYML
         $setter = 'set' . str_replace(['-', '_'], '', $name);
         if (method_exists($this, $setter)) {
             $this->$setter($value);
+        } else {
+            $this->unknownFields[$name] = $value;
         }
 
         return $this;
@@ -28,7 +43,9 @@ trait TYML
      */
     protected function toArray()
     {
-        $array = [];
+        $array = [
+            'unknownFields' => $this->unknownFields,
+        ];
 
         foreach ($this as $key => $value) {
             if (is_object($value) && method_exists($value, 'getData')) {
