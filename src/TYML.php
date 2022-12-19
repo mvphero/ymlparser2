@@ -43,9 +43,7 @@ trait TYML
      */
     protected function toArray()
     {
-        $array = [
-            'unknownFields' => $this->unknownFields,
-        ];
+        $array = $this->unknownFields;
 
         foreach ($this as $key => $value) {
             if (is_object($value) && method_exists($value, 'getData')) {
