@@ -90,15 +90,15 @@ class Category
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
     public function getParentId()
     {
-        return $this->parentId === null ? null : (int)$this->parentId;
+        return $this->parentId === null ? null : $this->parentId;
     }
 
     /**
-     * @param int $value
+     * @param string $value
      * @return $this
      */
     public function setParentId($value)
