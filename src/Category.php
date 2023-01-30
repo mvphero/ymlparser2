@@ -71,11 +71,11 @@ class Category
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
     public function getId()
     {
-        return $this->id === null ? null : (int)$this->id;
+        return $this->id === null ? null : $this->id;
     }
 
     /**
