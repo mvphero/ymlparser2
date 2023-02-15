@@ -26,6 +26,11 @@ class Region
     protected $price;
 
     /**
+     * @var array
+     */
+    protected $prices;
+
+    /**
      * @var
      */
     protected $oldPrice;
@@ -47,8 +52,24 @@ class Region
      */
     public function addAttributes($attributes)
     {
-        foreach ($attributes as $name => $value) {
-            $this->addField($name, $value);
+        foreach ($attributes as $node) {
+            if (strtolower($node['name']) === 'price') {
+                $type = mb_strtolower($node['attributes']['type'] ?? null);
+                if (!$type || $type === 'default') {
+                    $this->setPrice($node['value']);
+                } else {
+                    $this->addPrices($node['value'], $type);
+                }
+            } elseif ($node['name'] === 'oldprice') {
+                $type = mb_strtolower($node['attributes']['type'] ?? null);
+                if (!$type || $type === 'default') {
+                    $this->setOldprice($node['value']);
+                } else {
+                    $this->addOldPrices($node['value'], $type);
+                }
+            } else {
+                $this->addField($node['name'], $node['value']);
+            }
         }
 
         return $this;
@@ -121,5 +142,23 @@ class Region
     public function getPresence(): bool
     {
         return $this->available === 'true';
+    }
+
+    public function addPrices($price, $type)
+    {
+        $this->prices[$type]['price'] = (float) $price;
+    }
+
+    public function addOldPrices($price, $type)
+    {
+        $this->prices[$type]['oldPrice'] = (float) $price;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPrices()
+    {
+        return $this->prices;
     }
 }
