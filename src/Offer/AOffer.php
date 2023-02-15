@@ -48,6 +48,11 @@ abstract class AOffer
     protected $price;
 
     /**
+     * @var array
+     */
+    protected $prices;
+
+    /**
      * @var string
      */
     protected $oldprice;
@@ -330,6 +335,20 @@ abstract class AOffer
             $this->addPicture($attrNode['value']);
         } elseif (strtolower($attrNode['name']) === 'barcode') {
             $this->addBarcode($attrNode['value']);
+        } elseif (strtolower($attrNode['name']) === 'price') {
+            $type = mb_strtolower($attrNode['attributes']['type'] ?? null);
+            if (!$type || $type === 'default') {
+                $this->setPrice($attrNode['value']);
+            } else {
+                $this->addPrices($attrNode['value'], $type);
+            }
+        } elseif (strtolower($attrNode['name']) === 'oldprice') {
+            $type = mb_strtolower($attrNode['attributes']['type'] ?? null);
+            if (!$type || $type === 'default') {
+                $this->setOldprice($attrNode['value']);
+            } else {
+                $this->addOldPrices($attrNode['value'], $type);
+            }
         } elseif (strtolower($attrNode['name']) === 'param') {
             $this->addParam((new Param())->addAttributes($attrNode['attributes'] + ['value' => $attrNode['value']]));
         } elseif (strtolower($attrNode['name']) === 'region' || strtolower($attrNode['name']) === 'shop') {
@@ -410,6 +429,16 @@ abstract class AOffer
         return $this;
     }
 
+    public function addPrices($price, $type)
+    {
+        $this->prices[$type]['price'] = (float) $price;
+    }
+
+    public function addOldPrices($price, $type)
+    {
+        $this->prices[$type]['oldPrice'] = (float) $price;
+    }
+
     /**
      * @return bool|null
      */
@@ -454,6 +483,14 @@ abstract class AOffer
     public function getPrice()
     {
         return $this->price === null ? null : (float)$this->price;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPrices()
+    {
+        return $this->prices;
     }
 
     /**
@@ -861,6 +898,11 @@ abstract class AOffer
         return $this;
     }
 
+    public function getRegions()
+    {
+        return $this->regions;
+    }
+
     /**
      * @param Region $value
      * @return $this
@@ -926,9 +968,17 @@ abstract class AOffer
      */
     protected function parseRegion(array $attrNode): void
     {
-        $attributes = $attrNode['attributes'];
+        $attributes = [];
+
+        foreach ($attrNode['attributes'] as $key => $value) {
+            $attributes[] = [
+                'name' => $key,
+                'value' => $value,
+            ];
+        }
+
         foreach ($attrNode['nodes'] as $node) {
-            $attributes[$node['name']] = $node['value'];
+            $attributes[] = $node;
         }
         $this->addRegion((new Region())->addAttributes($attributes));
     }
