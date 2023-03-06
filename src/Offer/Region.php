@@ -36,6 +36,11 @@ class Region
     protected $oldPrice;
 
     /**
+     * @var int
+     */
+    protected $count;
+
+    /**
      * @return bool
      */
     public function isValid()
@@ -160,5 +165,21 @@ class Region
     public function getPrices()
     {
         return $this->prices;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    /**
+     * @param mixed $count
+     */
+    public function setCount($count): void
+    {
+        $this->count = $count;
     }
 }

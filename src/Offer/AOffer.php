@@ -163,6 +163,11 @@ abstract class AOffer
     protected $label;
 
     /**
+     * @var int
+     */
+    protected $count;
+
+    /**
      * @return array
      */
     public function getAttributesList()
@@ -174,7 +179,7 @@ abstract class AOffer
             'price', 'oldprice', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
             'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode',
-            'region', 'brandId', 'snippet', 'label'
+            'region', 'brandId', 'snippet', 'label', 'count'
         ];
     }
 
@@ -981,5 +986,21 @@ abstract class AOffer
             $attributes[] = $node;
         }
         $this->addRegion((new Region())->addAttributes($attributes));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    /**
+     * @param mixed $count
+     */
+    public function setCount($count): void
+    {
+        $this->count = $count;
     }
 }
