@@ -74,10 +74,6 @@ abstract class AMainOffer extends AExtOffer
             $this->addError("Offer: incorrect value in attribute 'step-quantity'");
         }
 
-        if ($this->groupId !== null && !is_numeric($this->groupId)) {
-            $this->addError("Offer: incorrect value in attribute 'group_id'");
-        }
-
         if ($this->from !== null && $this->from !== 'true' && $this->from !== 'false') {
             $this->addError("Price: incorrect value in attribute 'from'");
         }
@@ -139,11 +135,11 @@ abstract class AMainOffer extends AExtOffer
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
     public function getGroupId()
     {
-        return $this->groupId === null ? null : (int)$this->groupId;
+        return $this->groupId === null ? null : $this->groupId;
     }
 
     /**
