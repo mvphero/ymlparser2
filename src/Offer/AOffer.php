@@ -319,46 +319,47 @@ abstract class AOffer
      */
     public function addAttribute(array $attrNode)
     {
-        if ($attrNode['name'] === 'outlets') {
+        $nodeName = mb_strtolower($attrNode['name']);
+        if ($nodeName === 'outlets') {
             foreach ($attrNode['nodes'] as $subNode) {
                 $this->addOutlet((new Outlet())->addAttributes($subNode['attributes']));
             }
         }
-        elseif (strtolower($attrNode['name']) === 'categoryid') {
+        elseif ($nodeName === 'categoryid') {
             if (!is_null($attrNode['value'])) {
                 $this->addField('categoryId', $attrNode['value']);
                 $this->addCategory($attrNode['value']);
             }
-        } elseif (strtolower($attrNode['name']) === 'categories') {
+        } elseif ($nodeName === 'categories') {
             foreach($attrNode['nodes'] as $key => $node) {
                 if (!$key) {
                     $this->addField('categoryId', $attrNode['value']);
                 }
                 $this->addCategory($node['value']);
             }
-        } elseif (strtolower($attrNode['name']) === 'picture') {
+        } elseif ($nodeName === 'picture') {
             $this->addPicture($attrNode['value']);
-        } elseif (strtolower($attrNode['name']) === 'barcode') {
+        } elseif ($nodeName === 'barcode') {
             $this->addBarcode($attrNode['value']);
-        } elseif (strtolower($attrNode['name']) === 'price') {
+        } elseif ($nodeName === 'price') {
             $type = mb_strtolower($attrNode['attributes']['type'] ?? null);
             if (!$type || $type === 'default') {
                 $this->setPrice($attrNode['value']);
             } else {
                 $this->addPrices($attrNode['value'], $type);
             }
-        } elseif (strtolower($attrNode['name']) === 'oldprice') {
+        } elseif ($nodeName === 'oldprice') {
             $type = mb_strtolower($attrNode['attributes']['type'] ?? null);
             if (!$type || $type === 'default') {
                 $this->setOldprice($attrNode['value']);
             } else {
                 $this->addOldPrices($attrNode['value'], $type);
             }
-        } elseif (strtolower($attrNode['name']) === 'param') {
+        } elseif ($nodeName === 'param') {
             $this->addParam((new Param())->addAttributes($attrNode['attributes'] + ['value' => $attrNode['value']]));
-        } elseif (strtolower($attrNode['name']) === 'region' || strtolower($attrNode['name']) === 'shop') {
+        } elseif ($nodeName === 'region' || $nodeName === 'shop') {
             $this->parseRegion($attrNode);
-        } else if(strtolower($attrNode['name']) === 'shops'){
+        } else if($nodeName === 'shops'){
             foreach ($attrNode['nodes'] as $node) {
                 $this->parseRegion($node);
             }
