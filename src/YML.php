@@ -53,17 +53,28 @@ class YML
      */
     protected $openFlags;
 
+    protected $objects = [];
+
     /**
      * YML constructor.
      */
     public function __construct(int $openFlag = LIBXML_BIGLINES | LIBXML_COMPACT | LIBXML_NOENT | LIBXML_NOERROR)
     {
+        $this->objects = [
+            'default' => new SimpleOffer(),
+            'book' => new BookOffer(),
+            'audiobook' => new AudioBookOffer(),
+            'artist.title' => new ArtistTitleOffer(),
+            'medicine' => new MedicineOffer(),
+            'event-ticket' => new EventTicketOffer(),
+            'tour' => new TourOffer(),
+        ];
         $this->XMLReader = new \XMLReader();
         $this->openFlags = $openFlag;
     }
 
     /**
-     * @param string $uri
+     * @param string      $uri
      * @param string|bool $schema
      * @throws \Exception
      */
@@ -256,7 +267,7 @@ class YML
      */
     protected function open()
     {
-        $uri = (string)$this->uri;
+        $uri = (string) $this->uri;
         if (!$this->XMLReader->open($uri, null, $this->openFlags)) {
             throw new FileNotFoundException("Failed to open XML file '{$uri}'");
         }
@@ -305,23 +316,9 @@ class YML
      */
     protected function createOffer($type)
     {
-        switch ($type) {
-            case 'vendor.model':
-                return new SimpleOffer();
-            case 'book':
-                return new BookOffer();
-            case 'audiobook':
-                return new AudioBookOffer();
-            case 'artist.title':
-                return new ArtistTitleOffer();
-            case 'medicine':
-                return new MedicineOffer();
-            case 'event-ticket':
-                return new EventTicketOffer();
-            case 'tour':
-                return new TourOffer();
-            default:
-                return new SimpleOffer();
+        if (!isset($this->objects[$type])) {
+            return clone $this->objects['default'];
         }
+        return clone $this->objects[$type];
     }
 }
