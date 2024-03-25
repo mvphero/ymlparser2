@@ -320,7 +320,7 @@ abstract class AOffer
     public function addAttribute(array $attrNode)
     {
         $nodeName = mb_strtolower($attrNode['name']);
-        if ($attrNode['name'] === 'outlets') {
+        if ($nodeName === 'outlets') {
             foreach ($attrNode['nodes'] as $subNode) {
                 $this->addOutlet((new Outlet())->addAttributes($subNode['attributes']));
             }
