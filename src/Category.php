@@ -171,7 +171,7 @@ class Category
         return $this;
     }
 
-    public function getImageUrl(): string
+    public function getImageUrl(): ?string
     {
         return $this->imageUrl;
     }
