@@ -33,6 +33,11 @@ class Category
     private $ordering;
 
     /**
+     * @var string
+     */
+    private $imageUrl;
+
+    /**
      * @var array
      */
     public $children = [];
@@ -165,4 +170,17 @@ class Category
 
         return $this;
     }
+
+    public function getImageUrl(): string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(string $imageUrl): self
+    {
+        $this->imageUrl = $imageUrl;
+
+        return $this;
+    }
+
 }
