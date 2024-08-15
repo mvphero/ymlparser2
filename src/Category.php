@@ -171,12 +171,20 @@ class Category
         return $this;
     }
 
-    public function getImageUrl(): ?string
+    /**
+     * @return string
+     */
+    public function getImageUrl()
     {
         return $this->imageUrl;
     }
 
-    public function setImageUrl(string $imageUrl): self
+    /**
+     * @param string $imageUrl
+     *
+     * @return self
+     */
+    public function setImageUrl($imageUrl)
     {
         $this->imageUrl = $imageUrl;
 
