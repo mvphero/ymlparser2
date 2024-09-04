@@ -3,6 +3,7 @@
 namespace LireinCore\YMLParser;
 
 use LireinCore\Exception\FileNotFoundException;
+use LireinCore\YMLParser\Exception\ParseException;
 use LireinCore\YMLParser\Offer\ArtistTitleOffer;
 use LireinCore\YMLParser\Offer\AudioBookOffer;
 use LireinCore\YMLParser\Offer\BookOffer;
@@ -227,16 +228,18 @@ class YML
      */
     protected function parseAttributes()
     {
-        $xml = $this->XMLReader;
-        $attributes = [];
+        return $this->handleParseErrors(function () {
+            $xml = $this->XMLReader;
+            $attributes = [];
 
-        if ($xml->hasAttributes) {
-            while ($xml->moveToNextAttribute()) {
-                $attributes[$xml->name] = $xml->value;
+            if ($xml->hasAttributes) {
+                while ($xml->moveToNextAttribute()) {
+                    $attributes[$xml->name] = $xml->value;
+                }
             }
-        }
 
-        return $attributes;
+            return $attributes;
+        });
     }
 
     /**
@@ -245,21 +248,23 @@ class YML
      */
     protected function parseOffersCount()
     {
-        $xml = $this->XMLReader;
-        $count = 0;
+        return $this->handleParseErrors(function () {
+            $xml = $this->XMLReader;
+            $count = 0;
 
-        while ($this->read()) {
-            if ($this->path === 'yml_catalog/shop/offers/offer') {
-                $count++;
-                break;
+            while ($this->read()) {
+                if ($this->path === 'yml_catalog/shop/offers/offer') {
+                    $count++;
+                    break;
+                }
             }
-        }
 
-        while ($xml->next($xml->localName)) {
-            $count++;
-        }
+            while ($xml->next($xml->localName)) {
+                $count++;
+            }
 
-        return $count;
+            return $count;
+        });
     }
 
     /**
@@ -293,21 +298,23 @@ class YML
      */
     protected function read()
     {
-        $xml = $this->XMLReader;
+        return $this->handleParseErrors(function () {
+            $xml = $this->XMLReader;
 
-        if ($xml->read()) {
-            if ($xml->nodeType === \XMLReader::ELEMENT && !$xml->isEmptyElement) {
-                $this->pathArr[] = $xml->name;
-                $this->path = implode('/', $this->pathArr);
-            } elseif ($xml->nodeType === \XMLReader::END_ELEMENT) {
-                array_pop($this->pathArr);
-                $this->path = implode('/', $this->pathArr);
+            if ($xml->read()) {
+                if ($xml->nodeType === \XMLReader::ELEMENT && !$xml->isEmptyElement) {
+                    $this->pathArr[] = $xml->name;
+                    $this->path = implode('/', $this->pathArr);
+                } elseif ($xml->nodeType === \XMLReader::END_ELEMENT) {
+                    array_pop($this->pathArr);
+                    $this->path = implode('/', $this->pathArr);
+                }
+
+                return true;
             }
 
-            return true;
-        }
-
-        return false;
+            return false;
+        });
     }
 
     /**
@@ -320,5 +327,57 @@ class YML
             return clone $this->objects['default'];
         }
         return clone $this->objects[$type];
+    }
+
+    /**
+     * @param callable $parse
+     * @return mixed
+     * @throws ParseException
+     */
+    protected function handleParseErrors($parse)
+    {
+        if (($this->openFlags & \LIBXML_NOERROR) === \LIBXML_NOERROR) {
+            return $parse();
+        }
+
+        $prevErrorHandler = \set_error_handler(null);
+        $prevLibxmlUseErrorsFlag = \libxml_use_internal_errors();
+
+        \libxml_use_internal_errors(true);
+
+        try {
+            $parseResult = $parse();
+        } finally {
+            $libXmlErrors = \libxml_get_errors();
+            \libxml_clear_errors();
+            \libxml_use_internal_errors($prevLibxmlUseErrorsFlag);
+            \set_error_handler($prevErrorHandler);
+        }
+
+        if (\count($libXmlErrors) > 0) {
+            $error = $libXmlErrors[0];
+            throw new ParseException('Parse error', $error, $this->extractBrokenFragmentByXmlError($error));
+        }
+
+        return $parseResult;
+    }
+
+    /**
+     * @param \LibXMLError $error
+     * @param int $length
+     * @return string
+     */
+    protected function extractBrokenFragmentByXmlError(\LibXMLError $error, $length = 50)
+    {
+        if (!\is_file($this->uri)) {
+            return '';
+        }
+
+        $encoding = 'UTF-8';
+        $xmlFile = new FileObject($this->uri);
+        $xmlFile->seek(max($error->line - 1, 0));
+        $xmlFile->seekByCharIndex($error->column - \intval(\ceil($length) / 2), $encoding);
+
+        return \trim($xmlFile->readChars($length, $encoding));
     }
 }
