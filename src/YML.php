@@ -355,29 +355,9 @@ class YML
         }
 
         if (\count($libXmlErrors) > 0) {
-            $error = $libXmlErrors[0];
-            throw new ParseException('Parse error', $error, $this->extractBrokenFragmentByXmlError($error));
+            throw new ParseException('Parse error', $libXmlErrors[0]);
         }
 
         return $parseResult;
-    }
-
-    /**
-     * @param \LibXMLError $error
-     * @param int $length
-     * @return string
-     */
-    protected function extractBrokenFragmentByXmlError(\LibXMLError $error, $length = 50)
-    {
-        if (!\is_file($this->uri)) {
-            return '';
-        }
-
-        $encoding = 'UTF-8';
-        $xmlFile = new FileObject($this->uri);
-        $xmlFile->seek(max($error->line - 1, 0));
-        $xmlFile->seekByCharIndex($error->column - \intval(\ceil($length) / 2), $encoding);
-
-        return \trim($xmlFile->readChars($length, $encoding));
     }
 }
