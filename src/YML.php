@@ -3,7 +3,7 @@
 namespace LireinCore\YMLParser;
 
 use LireinCore\Exception\FileNotFoundException;
-use LireinCore\Exception\ParseException;
+use LireinCore\YMLParser\Exception\ParseException;
 use LireinCore\YMLParser\Offer\ArtistTitleOffer;
 use LireinCore\YMLParser\Offer\AudioBookOffer;
 use LireinCore\YMLParser\Offer\BookOffer;

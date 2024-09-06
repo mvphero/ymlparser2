@@ -1,10 +1,10 @@
 <?php
 
-namespace LireinCore\Exception;
+namespace LireinCore\YMLParser\Exception;
 
 use LibXMLError;
 
-class ParseException extends AException
+class ParseException extends \Exception
 {
     /**
      * @var LibXMLError|null
