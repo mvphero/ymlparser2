@@ -54,45 +54,58 @@ class YML
      */
     protected $openFlags;
 
+    protected $objects = [];
+
     /**
      * YML constructor.
      */
     public function __construct(int $openFlag = LIBXML_BIGLINES | LIBXML_COMPACT | LIBXML_NOENT | LIBXML_NOERROR)
     {
+        $this->objects = [
+            'default' => new SimpleOffer(),
+            'book' => new BookOffer(),
+            'audiobook' => new AudioBookOffer(),
+            'artist.title' => new ArtistTitleOffer(),
+            'medicine' => new MedicineOffer(),
+            'event-ticket' => new EventTicketOffer(),
+            'tour' => new TourOffer(),
+        ];
         $this->XMLReader = new \XMLReader();
         $this->openFlags = $openFlag;
     }
 
     /**
-     * @param string $uri
+     * @param string      $uri
      * @param string|bool $schema
      * @throws \Exception
      */
     public function parse($uri, $schema = true)
     {
-        $this->uri = $uri;
-        if ($schema === true) {
-            $this->schema = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'yml.xsd';
-        } elseif (is_string($schema)) {
-            $this->schema = $schema;
-        }
-
-        $this->open();
-
-        while ($this->read()) {
-            if ($this->path === 'yml_catalog') {
-                $this->date = $this->XMLReader->getAttribute('date');
-                while ($this->read()) {
-                    if ($this->path === 'yml_catalog/shop') {
-                        $this->shop = $this->parseShop();
-                        break;
-                    }
-                }
-                break;
+        return $this->handleParseErrors(function () use ($uri,$schema) {
+            $this->uri = $uri;
+            if ($schema === true) {
+                $this->schema = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'yml.xsd';
+            } elseif (is_string($schema)) {
+                $this->schema = $schema;
             }
-        }
-
-        $this->close();
+    
+            $this->open();
+    
+            while ($this->read()) {
+                if ($this->path === 'yml_catalog') {
+                    $this->date = $this->XMLReader->getAttribute('date');
+                    while ($this->read()) {
+                        if ($this->path === 'yml_catalog/shop') {
+                            $this->shop = $this->parseShop();
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+    
+            $this->close();
+        });
     }
 
     /**
@@ -217,7 +230,7 @@ class YML
      */
     protected function parseAttributes()
     {
-        return $this->handleParseErrors(function () {
+
             $xml = $this->XMLReader;
             $attributes = [];
 
@@ -228,7 +241,7 @@ class YML
             }
 
             return $attributes;
-        });
+    
     }
 
     /**
@@ -237,7 +250,7 @@ class YML
      */
     protected function parseOffersCount()
     {
-        return $this->handleParseErrors(function () {
+  
             $xml = $this->XMLReader;
             $count = 0;
 
@@ -253,7 +266,7 @@ class YML
             }
 
             return $count;
-        });
+
     }
 
     /**
@@ -261,7 +274,7 @@ class YML
      */
     protected function open()
     {
-        $uri = (string)$this->uri;
+        $uri = (string) $this->uri;
         if (!$this->XMLReader->open($uri, null, $this->openFlags)) {
             throw new FileNotFoundException("Failed to open XML file '{$uri}'");
         }
@@ -287,23 +300,23 @@ class YML
      */
     protected function read()
     {
-        return $this->handleParseErrors(function () {
-            $xml = $this->XMLReader;
+ 
+        $xml = $this->XMLReader;
 
-            if ($xml->read()) {
-                if ($xml->nodeType === \XMLReader::ELEMENT && !$xml->isEmptyElement) {
-                    $this->pathArr[] = $xml->name;
-                    $this->path = implode('/', $this->pathArr);
-                } elseif ($xml->nodeType === \XMLReader::END_ELEMENT) {
-                    array_pop($this->pathArr);
-                    $this->path = implode('/', $this->pathArr);
-                }
-
-                return true;
+        if ($xml->read()) {
+            if ($xml->nodeType === \XMLReader::ELEMENT && !$xml->isEmptyElement) {
+                $this->pathArr[] = $xml->name;
+                $this->path = implode('/', $this->pathArr);
+            } elseif ($xml->nodeType === \XMLReader::END_ELEMENT) {
+                array_pop($this->pathArr);
+                $this->path = implode('/', $this->pathArr);
             }
 
-            return false;
-        });
+            return true;
+        }
+
+        return false;
+ 
     }
 
     /**
@@ -312,24 +325,10 @@ class YML
      */
     protected function createOffer($type)
     {
-        switch ($type) {
-            case 'vendor.model':
-                return new SimpleOffer();
-            case 'book':
-                return new BookOffer();
-            case 'audiobook':
-                return new AudioBookOffer();
-            case 'artist.title':
-                return new ArtistTitleOffer();
-            case 'medicine':
-                return new MedicineOffer();
-            case 'event-ticket':
-                return new EventTicketOffer();
-            case 'tour':
-                return new TourOffer();
-            default:
-                return new SimpleOffer();
+        if (!isset($this->objects[$type])) {
+            return clone $this->objects['default'];
         }
+        return clone $this->objects[$type];
     }
 
     /**
