@@ -546,45 +546,57 @@ class Shop
 
     /**
      * @param Category[] $categories
-     * @param null|int $parentId
      * @return array
      */
-    public function buildTree(array $categories, $parentId = null): array {
-        // Create a map to hold children for each parent ID
-        $childrenMap = [];
+    public function buildTree(array $categories): array {
+        $categoryMap = [];
+        $tree = [];
+        $this->categories = [];
+    
+        // Build a map of categories indexed by their IDs
         foreach ($categories as $category) {
-            if ($category->getId() === $category->getParentId()) {
-                // Skip categories that reference themselves as the parent
+            $category->children = [];
+            $categoryMap[$category->getId()] = $category;
+        }
+    
+        // Assign categories to their parents
+        foreach ($categories as $category) {
+            $parentId = $category->getParentId();
+    
+            // Skip categories without IDs or self-referential categories
+            if (!$category->getId() || $category->getId() === $parentId) {
                 continue;
             }
-
-            // Initialize the children array if it does not exist
-            if (!isset($childrenMap[$category->getParentId()])) {
-                $childrenMap[$category->getParentId()] = [];
+    
+            // If parent exists, assign to parent's children
+            if ($parentId && isset($categoryMap[$parentId])) {
+                $categoryMap[$parentId]->children[] = $category;
+            } else {
+                // Parent doesn't exist or parentId is null, so it's a root category
+                $tree[] = $category;
             }
-
-            // Add the category to the children map under its parent ID
-            $childrenMap[$category->getParentId()][] = $category;
+    
+            // Clone the category without children and store it
+            $ctg = clone $category;
+            $ctg->children = [];
+            $this->categories[$ctg->getId()] = $ctg;
         }
-
-        // Function to recursively build the tree using the $childrenMap
-        $buildBranch = function ($parentId) use (&$buildBranch, &$childrenMap) {
-            $branch = [];
-            if (isset($childrenMap[$parentId])) {
-                foreach ($childrenMap[$parentId] as $category) {
-                    $children = $buildBranch($category->getId());
-                    if ($children) {
-                        $category->children = $children;
-                    }
-                    $branch[] = $category;
+    
+        // Handle categories whose parents appear after them in the array
+        // Ensure that all children are properly assigned
+        foreach ($categoryMap as $category) {
+            $parentId = $category->getParentId();
+            if ($parentId && isset($categoryMap[$parentId])) {
+                $parent = $categoryMap[$parentId];
+                if (!in_array($category, $parent->children, true)) {
+                    $parent->children[] = $category;
                 }
             }
-            return $branch;
-        };
-
-        // Start building the tree from the root (where $parentId is null)
-        return $buildBranch($parentId);
+        }
+    
+        return $tree;
     }
+
 
     /**
      * @param Category[] $value
