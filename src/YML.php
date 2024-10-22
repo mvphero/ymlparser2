@@ -70,7 +70,7 @@ class YML
      */
     public function parse($uri, $schema = true)
     {
-        return $this->handleParseErrors(function () {
+        return $this->handleParseErrors(function () use ($uri,$schema) {
             $this->uri = $uri;
             if ($schema === true) {
                 $this->schema = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'yml.xsd';
