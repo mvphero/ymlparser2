@@ -70,29 +70,31 @@ class YML
      */
     public function parse($uri, $schema = true)
     {
-        $this->uri = $uri;
-        if ($schema === true) {
-            $this->schema = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'yml.xsd';
-        } elseif (is_string($schema)) {
-            $this->schema = $schema;
-        }
-
-        $this->open();
-
-        while ($this->read()) {
-            if ($this->path === 'yml_catalog') {
-                $this->date = $this->XMLReader->getAttribute('date');
-                while ($this->read()) {
-                    if ($this->path === 'yml_catalog/shop') {
-                        $this->shop = $this->parseShop();
-                        break;
-                    }
-                }
-                break;
+        return $this->handleParseErrors(function () {
+            $this->uri = $uri;
+            if ($schema === true) {
+                $this->schema = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'yml.xsd';
+            } elseif (is_string($schema)) {
+                $this->schema = $schema;
             }
-        }
-
-        $this->close();
+    
+            $this->open();
+    
+            while ($this->read()) {
+                if ($this->path === 'yml_catalog') {
+                    $this->date = $this->XMLReader->getAttribute('date');
+                    while ($this->read()) {
+                        if ($this->path === 'yml_catalog/shop') {
+                            $this->shop = $this->parseShop();
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+    
+            $this->close();
+        });
     }
 
     /**
@@ -217,7 +219,7 @@ class YML
      */
     protected function parseAttributes()
     {
-        return $this->handleParseErrors(function () {
+  
             $xml = $this->XMLReader;
             $attributes = [];
 
@@ -228,7 +230,7 @@ class YML
             }
 
             return $attributes;
-        });
+
     }
 
     /**
@@ -237,7 +239,7 @@ class YML
      */
     protected function parseOffersCount()
     {
-        return $this->handleParseErrors(function () {
+
             $xml = $this->XMLReader;
             $count = 0;
 
@@ -253,7 +255,7 @@ class YML
             }
 
             return $count;
-        });
+  
     }
 
     /**
@@ -287,7 +289,7 @@ class YML
      */
     protected function read()
     {
-        return $this->handleParseErrors(function () {
+
             $xml = $this->XMLReader;
 
             if ($xml->read()) {
@@ -303,7 +305,7 @@ class YML
             }
 
             return false;
-        });
+
     }
 
     /**
