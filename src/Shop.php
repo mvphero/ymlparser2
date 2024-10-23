@@ -548,53 +548,81 @@ class Shop
      * @param Category[] $categories
      * @return array
      */
+    /**
+     * @param Category[] $categories
+     * @return array
+     */
     public function buildTree(array $categories): array {
         $categoryMap = [];
         $tree = [];
         $this->categories = [];
-    
-        // Build a map of categories indexed by their IDs
+        $categoryIds = [];
+
+        // Collect all category IDs to check for missing parents
+        foreach ($categories as $category) {
+            $categoryIds[$category->getId()] = true;
+        }
+
+        // Build a map of categories and adjust parentIds if necessary
         foreach ($categories as $category) {
             $category->children = [];
+
+            // Adjust parentId to 0 if the parent doesn't exist
+            $parentId = $category->getParentId();
+            if ($parentId && !isset($categoryIds[$parentId])) {
+                $category->setParentId(0);
+                $parentId = 0; // Update the variable for consistency
+            }
+
             $categoryMap[$category->getId()] = $category;
         }
-    
-        // Assign categories to their parents
+
+        // Assign categories to their parents or as root if parentId is 0
         foreach ($categories as $category) {
             $parentId = $category->getParentId();
-    
-            // Skip categories without IDs or self-referential categories
+
+            // Skip invalid categories
             if (!$category->getId() || $category->getId() === $parentId) {
                 continue;
             }
-    
-            // If parent exists, assign to parent's children
-            if ($parentId && isset($categoryMap[$parentId])) {
+
+            if ($parentId == 0) {
+                // ParentId is 0, so it's a root category
+                $tree[$category->getId()] = $category;
+            } elseif (isset($categoryMap[$parentId])) {
+                // Assign to parent's children
                 $categoryMap[$parentId]->children[] = $category;
             } else {
-                // Parent doesn't exist or parentId is null, so it's a root category
-                $tree[] = $category;
+                // Parent doesn't exist (shouldn't happen now), treat as root
+                $tree[$category->getId()] = $category;
             }
-    
+
             // Clone the category without children and store it
             $ctg = clone $category;
             $ctg->children = [];
             $this->categories[$ctg->getId()] = $ctg;
         }
-    
-        // Handle categories whose parents appear after them in the array
-        // Ensure that all children are properly assigned
-        foreach ($categoryMap as $category) {
+
+        // Ensure all children are properly assigned
+        foreach ($categoryMap as $categoryId => $category) {
             $parentId = $category->getParentId();
-            if ($parentId && isset($categoryMap[$parentId])) {
+
+            // Skip if category is already a root
+            if ($parentId && isset($categoryMap[$parentId]) && !isset($tree[$categoryId])) {
                 $parent = $categoryMap[$parentId];
                 if (!in_array($category, $parent->children, true)) {
                     $parent->children[] = $category;
                 }
             }
         }
-    
-        return $tree;
+        // Adjust parentId to 0 for categories whose parent does not exist
+        foreach ($categoryMap as $category) {
+            $parentId = $category->getParentId();
+            if ($parentId && !isset($categoryMap[$parentId])) {
+                $category->setParentId(0);
+            }
+        }
+        return array_values($tree);
     }
 
 
