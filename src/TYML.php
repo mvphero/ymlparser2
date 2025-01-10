@@ -103,18 +103,13 @@ trait TYML
      */
     private function castStringToBooleanOrNull($value)
     {
-        $value = (string) $value;
-
+        $value = \trim((string) $value);
         $mapping = [
-            '1'     => true,
-            'true'  => true,
-            'yes'   => true,
-            '0'     => false,
             'false' => false,
             'no'    => false,
             ''      => null,
         ];
 
-        return array_key_exists($value, $mapping) ? $mapping[$value] : true;
+        return array_key_exists($value, $mapping) ? $mapping[$value] : (bool) $value;
     }
 }
