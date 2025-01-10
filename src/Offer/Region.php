@@ -41,6 +41,16 @@ class Region
     protected $count;
 
     /**
+     * @var bool|null
+     */
+    protected $pickup = null;
+
+    /**
+     * @var bool|null
+     */
+    protected $delivery = null;
+
+    /**
      * @return bool
      */
     public function isValid()
@@ -181,5 +191,39 @@ class Region
     public function setCount($count): void
     {
         $this->count = $count;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getPickup()
+    {
+        return $this->pickup;
+    }
+
+    /**
+     * @param mixed $pickup
+     * @return void
+     */
+    public function setPickup($pickup)
+    {
+        $this->pickup = $this->castStringToBooleanOrNull($pickup);
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getDelivery()
+    {
+        return $this->delivery;
+    }
+
+    /**
+     * @param mixed $delivery
+     * @return void
+     */
+    public function setDelivery($delivery)
+    {
+        $this->delivery = $this->castStringToBooleanOrNull($delivery);;
     }
 }
