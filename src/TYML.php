@@ -96,4 +96,25 @@ trait TYML
 
         return $subArray;
     }
+
+    /**
+     * @param string $value
+     * @return bool|null
+     */
+    private function castStringToBooleanOrNull($value)
+    {
+        $value = (string) $value;
+
+        $mapping = [
+            '1'     => true,
+            'true'  => true,
+            'yes'   => true,
+            '0'     => false,
+            'false' => false,
+            'no'    => false,
+            ''      => null,
+        ];
+
+        return array_key_exists($value, $mapping) ? $mapping[$value] : true;
+    }
 }
