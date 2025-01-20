@@ -27,6 +27,8 @@ class Brand
      */
     private $logo;
 
+    protected $imageUrl = null;
+
     /**
      * @return bool
      */
@@ -118,6 +120,24 @@ class Brand
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getImageUrl()
+    {
+        return $this->imageUrl;
+    }
+
+    /**
+     * @param string|null $url
+     */
+    public function setImageUrl($url)
+    {
+        $this->imageUrl = $url;
 
         return $this;
     }
