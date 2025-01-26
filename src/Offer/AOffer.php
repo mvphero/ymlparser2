@@ -168,6 +168,11 @@ abstract class AOffer
     protected $count;
 
     /**
+     * @var bool|null
+     */
+    protected $preorder = null;
+
+    /**
      * @return array
      */
     public function getAttributesList()
@@ -179,7 +184,7 @@ abstract class AOffer
             'price', 'oldprice', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
             'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode',
-            'region', 'brandId', 'snippet', 'label', 'count'
+            'region', 'brandId', 'snippet', 'label', 'count', 'preorder',
         ];
     }
 
@@ -247,6 +252,10 @@ abstract class AOffer
         if ($this->weight !== null && (!is_numeric($this->weight) || (float)$this->weight <= 0)) {
             $this->weight=(int)$this->weight;
             // $this->addError("Offer: incorrect value in attribute 'weight'");
+        }
+
+        if ($this->preorder !== null && $this->preorder !== 'true' && $this->preorder !== 'false') {
+            $this->addError("Offer: incorrect value in attribute 'preorder'");
         }
 
         $subIsValid = true;
@@ -1003,5 +1012,22 @@ abstract class AOffer
     public function setCount($count): void
     {
         $this->count = $count;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getPreorder()
+    {
+        return $this->preorder;
+    }
+
+    /**
+     * @param mixed $delivery
+     * @return void
+     */
+    public function setPreorder($preorder)
+    {
+        $this->preorder = $this->castStringToBooleanOrNull($preorder);;
     }
 }
