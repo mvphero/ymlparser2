@@ -53,7 +53,7 @@ class Region
     /**
      * @var bool|null
      */
-    protected $preorder = null;
+    protected $isPreorder = null;
 
     /**
      * @return bool
@@ -235,17 +235,17 @@ class Region
     /**
      * @return bool|null
      */
-    public function getPreorder()
+    public function getIsPreorder()
     {
-        return $this->preorder;
+        return $this->isPreorder;
     }
 
     /**
      * @param mixed $delivery
      * @return void
      */
-    public function setPreorder($preorder)
+    public function setIsPreorder($preorder)
     {
-        $this->preorder = $this->castStringToBooleanOrNull($preorder);;
+        $this->isPreorder = $this->castStringToBooleanOrNull($preorder);;
     }
 }

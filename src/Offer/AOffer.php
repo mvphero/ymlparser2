@@ -170,7 +170,7 @@ abstract class AOffer
     /**
      * @var bool|null
      */
-    protected $preorder = null;
+    protected $isPreorder = null;
 
     /**
      * @return array
@@ -184,7 +184,7 @@ abstract class AOffer
             'price', 'oldprice', 'currencyId', 'categoryId', 'picture', 'delivery',
             'pickup', 'store', 'outlets', 'description', 'sales_notes', 'country_of_origin',
             'barcode', 'cpa', 'param', 'expiry', 'weight', 'dimensions', 'offerCode',
-            'region', 'brandId', 'snippet', 'label', 'count', 'preorder',
+            'region', 'brandId', 'snippet', 'label', 'count', 'isPreorder',
         ];
     }
 
@@ -254,8 +254,8 @@ abstract class AOffer
             // $this->addError("Offer: incorrect value in attribute 'weight'");
         }
 
-        if ($this->preorder !== null && $this->preorder !== 'true' && $this->preorder !== 'false') {
-            $this->addError("Offer: incorrect value in attribute 'preorder'");
+        if ($this->isPreorder !== null && $this->isPreorder !== 'true' && $this->isPreorder !== 'false') {
+            $this->addError("Offer: incorrect value in attribute 'isPreorder'");
         }
 
         $subIsValid = true;
@@ -1017,17 +1017,17 @@ abstract class AOffer
     /**
      * @return bool|null
      */
-    public function getPreorder()
+    public function getIsPreorder()
     {
-        return $this->preorder;
+        return $this->isPreorder;
     }
 
     /**
-     * @param mixed $delivery
+     * @param mixed $preorder
      * @return void
      */
-    public function setPreorder($preorder)
+    public function setIsPreorder($preorder)
     {
-        $this->preorder = $this->castStringToBooleanOrNull($preorder);;
+        $this->isPreorder = $this->castStringToBooleanOrNull($preorder);;
     }
 }
