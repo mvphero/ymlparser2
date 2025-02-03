@@ -51,6 +51,11 @@ class Region
     protected $delivery = null;
 
     /**
+     * @var bool|null
+     */
+    protected $isPreorder = null;
+
+    /**
      * @return bool
      */
     public function isValid()
@@ -225,5 +230,22 @@ class Region
     public function setDelivery($delivery)
     {
         $this->delivery = $this->castStringToBooleanOrNull($delivery);;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getIsPreorder()
+    {
+        return $this->isPreorder;
+    }
+
+    /**
+     * @param mixed $delivery
+     * @return void
+     */
+    public function setIsPreorder($preorder)
+    {
+        $this->isPreorder = $this->castStringToBooleanOrNull($preorder);;
     }
 }
