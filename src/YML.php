@@ -304,6 +304,13 @@ class YML
         $xml = $this->XMLReader;
 
         if ($xml->read()) {
+            if (($this->openFlags & \LIBXML_NOERROR) === 0) {
+                $libXmlErrors = \libxml_get_errors();
+                if (\count($libXmlErrors) > 0) {
+                    throw new ParseException('Parse error', $libXmlErrors[0]);
+                }
+            }
+
             if ($xml->nodeType === \XMLReader::ELEMENT && !$xml->isEmptyElement) {
                 $this->pathArr[] = $xml->name;
                 $this->path = implode('/', $this->pathArr);
@@ -316,7 +323,6 @@ class YML
         }
 
         return false;
- 
     }
 
     /**
@@ -350,14 +356,9 @@ class YML
         try {
             $parseResult = $parse();
         } finally {
-            $libXmlErrors = \libxml_get_errors();
             \libxml_clear_errors();
             \libxml_use_internal_errors($prevLibxmlUseErrorsFlag);
             \set_error_handler($prevErrorHandler);
-        }
-
-        if (\count($libXmlErrors) > 0) {
-            throw new ParseException('Parse error', $libXmlErrors[0]);
         }
 
         return $parseResult;
