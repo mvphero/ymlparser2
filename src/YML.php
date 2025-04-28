@@ -132,20 +132,28 @@ class YML
     {
         $this->open();
 
-        while ($this->read()) {
-            if ($this->path === 'yml_catalog/shop/offers') {
-                while ($this->read()) {
-                    if ($this->path === 'yml_catalog/shop/offers/offer') {
-                        yield $this->parseOffer();
-                    } elseif ($this->path === 'yml_catalog/shop') {
-                        break;
+        try {
+            while ($this->read()) {
+                if ($this->path === 'yml_catalog/shop/offers') {
+                    while ($this->read()) {
+                        if ($this->path === 'yml_catalog/shop/offers/offer') {
+                            yield $this->parseOffer();
+                        } elseif ($this->path === 'yml_catalog/shop') {
+                            break;
+                        }
                     }
+                    break;
                 }
-                break;
             }
+        } catch (\ErrorException $exception) {
+            if (\strpos($exception->getMessage(), 'XMLReader') !== false
+                && \strpos($exception->getMessage(), 'parser error') !== false) {
+                throw new ParseException('Parse error in ' . $this->path);
+            }
+            throw $exception;
+        } finally {
+            $this->close();
         }
-
-        $this->close();
     }
 
     /**
