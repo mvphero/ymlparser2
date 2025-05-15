@@ -145,7 +145,7 @@ class YML
                     break;
                 }
             }
-        } catch (\ErrorException $exception) {
+        } catch (\Throwable $exception) {
             if (\strpos($exception->getMessage(), 'XMLReader') !== false
                 && \strpos($exception->getMessage(), 'parser error') !== false) {
                 throw new ParseException('Parse error in ' . $this->path);
