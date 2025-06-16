@@ -132,12 +132,15 @@ class YML
     {
         $this->open();
 
+        $lastSuccessParsedOfferId = null;
         try {
             while ($this->read()) {
                 if ($this->path === 'yml_catalog/shop/offers') {
                     while ($this->read()) {
                         if ($this->path === 'yml_catalog/shop/offers/offer') {
-                            yield $this->parseOffer();
+                            $offer = $this->parseOffer();
+                            $lastSuccessParsedOfferId = $offer->getId();
+                            yield $offer;
                         } elseif ($this->path === 'yml_catalog/shop') {
                             break;
                         }
@@ -148,7 +151,10 @@ class YML
         } catch (\Throwable $exception) {
             if (\strpos($exception->getMessage(), 'XMLReader') !== false
                 && \strpos($exception->getMessage(), 'parser error') !== false) {
-                throw new ParseException('Parse error in ' . $this->path);
+                throw new ParseException(sprintf('Parsing error in the neighboring offer after %s:%s',
+                    $this->path,
+                    $lastSuccessParsedOfferId ?: '1'
+                ));
             }
             throw $exception;
         } finally {
