@@ -150,10 +150,17 @@ class YML
             }
         } catch (\Throwable $exception) {
             if (\strpos($exception->getMessage(), 'XMLReader') !== false
-                && \strpos($exception->getMessage(), 'parser error') !== false) {
-                throw new ParseException(sprintf('Parsing error in the neighboring offer after %s:%s',
+                && \strpos($exception->getMessage(), 'parser error') !== false
+                && \strpos($this->path, 'yml_catalog/shop/offers/offer') !== false) {
+                if ($lastSuccessParsedOfferId === null) {
+                    throw new ParseException(sprintf('Parsing error in offer. Offer index: 0, path: %s',
+                        $this->path,
+                    ));
+                }
+
+                throw new ParseException(sprintf('Parsing error in next offer. Current offerId: %s, path: %s',
+                    $lastSuccessParsedOfferId,
                     $this->path,
-                    $lastSuccessParsedOfferId ?: '1'
                 ));
             }
             throw $exception;
