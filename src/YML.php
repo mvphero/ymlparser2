@@ -132,20 +132,41 @@ class YML
     {
         $this->open();
 
-        while ($this->read()) {
-            if ($this->path === 'yml_catalog/shop/offers') {
-                while ($this->read()) {
-                    if ($this->path === 'yml_catalog/shop/offers/offer') {
-                        yield $this->parseOffer();
-                    } elseif ($this->path === 'yml_catalog/shop') {
-                        break;
+        $lastSuccessParsedOfferId = null;
+        try {
+            while ($this->read()) {
+                if ($this->path === 'yml_catalog/shop/offers') {
+                    while ($this->read()) {
+                        if ($this->path === 'yml_catalog/shop/offers/offer') {
+                            $offer = $this->parseOffer();
+                            $lastSuccessParsedOfferId = $offer->getId();
+                            yield $offer;
+                        } elseif ($this->path === 'yml_catalog/shop') {
+                            break;
+                        }
                     }
+                    break;
                 }
-                break;
             }
-        }
+        } catch (\Throwable $exception) {
+            if (\strpos($exception->getMessage(), 'XMLReader') !== false
+                && \strpos($exception->getMessage(), 'parser error') !== false
+                && \strpos($this->path, 'yml_catalog/shop/offers/offer') !== false) {
+                if ($lastSuccessParsedOfferId === null) {
+                    throw new ParseException(sprintf('Parsing error in offer. Offer index: 0, path: %s',
+                        $this->path,
+                    ));
+                }
 
-        $this->close();
+                throw new ParseException(sprintf('Parsing error in next offer. Current offerId: %s, path: %s',
+                    $lastSuccessParsedOfferId,
+                    $this->path,
+                ));
+            }
+            throw $exception;
+        } finally {
+            $this->close();
+        }
     }
 
     /**
