@@ -158,9 +158,9 @@ abstract class AOffer
     protected $snippet;
 
     /**
-     * @var string
+     * @var string[]
      */
-    protected $label;
+    protected $labels;
 
     /**
      * @var int
@@ -970,11 +970,33 @@ abstract class AOffer
     }
 
     /**
+     * @deprecated The parser now supports reading more than one label node. See: getLabels()
+     *
+     * @param string
+     */
+    public function getLabel()
+    {
+        if (!count($this->labels)) {
+            return '';
+        }
+
+        return $this->labels[0];
+    }
+
+    /**
+     * @param string[]
+     */
+    public function getLabels()
+    {
+        return $this->labels;
+    }
+
+    /**
      * @param string $label
      */
     public function setLabel($label)
     {
-        $this->label = $label;
+        $this->labels[] = $label;
     }
 
     /**
@@ -1031,3 +1053,4 @@ abstract class AOffer
         $this->isPreorder = $this->castStringToBooleanOrNull($preorder);;
     }
 }
+
