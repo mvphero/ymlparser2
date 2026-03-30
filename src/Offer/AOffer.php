@@ -972,12 +972,12 @@ abstract class AOffer
     /**
      * @deprecated The parser now supports reading more than one label node. See: getLabels()
      *
-     * @param string
+     * @param string|null
      */
     public function getLabel()
     {
         if (!count($this->labels)) {
-            return '';
+            return null;
         }
 
         return $this->labels[0];
