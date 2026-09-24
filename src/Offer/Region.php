@@ -36,6 +36,11 @@ class Region
     protected $oldPrice;
 
     /**
+     * @var string|null
+     */
+    protected $currencyId;
+
+    /**
      * @var int
      */
     protected $count;
@@ -153,6 +158,22 @@ class Region
     public function setOldPrice($oldPrice)
     {
         $this->oldPrice = $oldPrice;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCurrencyId()
+    {
+        return $this->currencyId;
+    }
+
+    /**
+     * @param string $currencyId
+     */
+    public function setCurrencyId($currencyId)
+    {
+        $this->currencyId = $currencyId;
     }
 
     public function setPresence($presence){
