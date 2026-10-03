@@ -79,14 +79,14 @@ class Region
     {
         foreach ($attributes as $node) {
             if (strtolower($node['name']) === 'price') {
-                $type = mb_strtolower($node['attributes']['type'] ?? null);
+                $type = mb_strtolower($node['attributes']['type'] ?? '');
                 if (!$type || $type === 'default') {
                     $this->setPrice($node['value']);
                 } else {
                     $this->addPrices($node['value'], $type);
                 }
             } elseif ($node['name'] === 'oldprice') {
-                $type = mb_strtolower($node['attributes']['type'] ?? null);
+                $type = mb_strtolower($node['attributes']['type'] ?? '');
                 if (!$type || $type === 'default') {
                     $this->setOldprice($node['value']);
                 } else {

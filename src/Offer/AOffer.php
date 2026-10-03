@@ -351,14 +351,14 @@ abstract class AOffer
         } elseif ($nodeName === 'barcode') {
             $this->addBarcode($attrNode['value']);
         } elseif ($nodeName === 'price') {
-            $type = mb_strtolower($attrNode['attributes']['type'] ?? null);
+            $type = mb_strtolower($attrNode['attributes']['type'] ?? '');
             if (!$type || $type === 'default') {
                 $this->setPrice($attrNode['value']);
             } else {
                 $this->addPrices($attrNode['value'], $type);
             }
         } elseif ($nodeName === 'oldprice') {
-            $type = mb_strtolower($attrNode['attributes']['type'] ?? null);
+            $type = mb_strtolower($attrNode['attributes']['type'] ?? '');
             if (!$type || $type === 'default') {
                 $this->setOldprice($attrNode['value']);
             } else {
